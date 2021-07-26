@@ -1,0 +1,396 @@
+
+% ここからだよ！！！！！！！！！！！
+%%%%フォントの埋め込み%%%%
+\AtBeginDvi{\special{pdf:mapfile uptex-ipa.map}}
+%%%%クラス指定%%%%
+\documentclass[a4paper,11pt,uplatex]{jsarticle} %一段組のとき
+% \documentclass[a4paper,11pt,fleqn,twocolumn,uplatex]{jsarticle} %二段組のとき
+%%%%余白の設定%%%%
+\usepackage[truedimen]{geometry}
+\geometry{top=28truemm, bottom=20truemm, left=20truemm, right=20truemm, includefoot}
+%%%%パッケージ%%%
+\usepackage[dvipdfmx]{graphicx,color} %図の挿入
+\usepackage{amsmath, amssymb, bm, mathrsfs}
+\usepackage{cite}
+\usepackage{multicol, multirow} %表中で列を複数化
+\usepackage{caption, subcaption}
+\usepackage{cases} %連立方程式用
+\usepackage{comment, url}
+\usepackage{siunitx, longtable}
+\usepackage{algorithm, algorithmic}
+\usepackage{enumitem}
+%2020年追加
+\usepackage{fancyhdr}
+\usepackage{udline}
+%%%%theorem関連%%%
+\usepackage{amsthm, thmtools}
+\theoremstyle{definition}	% definition style
+\renewcommand{\figurename}{Fig.~}
+
+% tcolorbox
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+
+% matlabコード挿入
+% \usepackage{mcode} 
+% \usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+\usepackage{listings} %ソースコード表示用
+\lstset{
+language= Matlab,
+backgroundcolor={\color[gray]{.90}},
+basicstyle={\small},
+identifierstyle={\small},
+commentstyle={\small\ttfamily \color[rgb]{0,0.5,0}},
+keywordstyle={\small\bfseries \color[rgb]{0,0,0.8}},
+ndkeywordstyle={\small},
+stringstyle={\small\ttfamily \color[rgb]{0,0,1}},
+frame={tb},
+breaklines=true,
+columns=[l]{fullflexible},
+numbers=left,
+xrightmargin=0zw,
+xleftmargin=3zw,
+numberstyle={\scriptsize},
+stepnumber=1,
+numbersep=1zw,
+morecomment=[l]{//}
+}
+
+%英語を使いたいときはこっち（日本語のときはコメントアウト）
+%\renewcommand{\thmname}  {Theorem}
+%\newcommand{\defnname}   {Definition}
+%\newcommand{\lemname}   {Lemma}
+%\newcommand{\corname}   {Corollary}
+%\newcommand{\propname}  {Proposition}
+%\newcommand{\remname}{Remark}
+%\newcommand{\exmpname}  {Example}
+%\newcommand{\assumname}   {Assumption}
+%日本語を使いたいときはこっち（英語のときはコメントアウト）
+\renewcommand{\thmname}  {定理}
+\newcommand{\defnname}   {定義}
+\newcommand{\lemname}   {補題}
+\newcommand{\corname}   {系}
+\newcommand{\propname}  {命題}
+\newcommand{\remname}{注意}
+\newcommand{\exmpname}  {例}
+\newcommand{\assumname}   {仮定}
+\newtheorem{thm}    {\thmname}  [section]
+\newtheorem{defn} {\defnname}   [section]
+\newtheorem{lem}      {\lemname}   [section]
+\newtheorem{cor}  {\corname}   [section]
+\newtheorem{prop}{\propname}  [section]
+\newtheorem{rem}     {\remname}[section]
+\newtheorem{exmp}    {\exmpname}  [section]
+\newtheorem{assum} {\assumname}   [section]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% refの定義
+% 式，図，表
+\newcommand{\figref}[1]{Fig. \ref{#1}}
+\newcommand{\Figref}[1]{Figure \ref{#1}}
+\newcommand{\figsref}[2]{Figs. \ref{#1} -- \ref{#2}}
+\newcommand{\Figsref}[2]{Figures \ref{#1} -- \ref{#2}}
+\newcommand{\tabref}[1]{Table \ref{#1}}
+% 定理等
+\newcommand{\thmref}[1]  {\thmname~\ref{#1}}
+\newcommand{\defnref}[1]   {\defnname~\ref{#1}}
+\newcommand{\lemref}[1]   {\lemname~\ref{#1}}
+\newcommand{\cororef}[1]   {\corname~\ref{#1}}
+\newcommand{\propref}[1]  {\propname~\ref{#1}}
+\newcommand{\remref}[1]{\remname~\ref{#1}}
+\newcommand{\exmpref}[1]  {\exmpname~\ref{#1}}
+\newcommand{\assumref}[1]   {\assumname~\ref{#1}}
+% 章，節，項
+\newcommand{\chapref}[1]{第\ref{#1}章}
+\newcommand{\secref}[1]{\ref{#1}節}
+\newcommand{\subsecref}[1]{\ref{#1}項}
+%%%%よく使うコマンドの定義%%%
+\newcommand{\R}{{\mathbb{R}}} %実数
+\newcommand{\T}{\textrm{T}}
+\newcommand{\sk}{\textrm{sk}}
+\newcommand{\diag}{\textrm{diag}}
+\newcommand{\Ad}{\textrm{Ad}}
+\usepackage[dvipdfmx,
+colorlinks=false,
+bookmarks=true,
+bookmarksnumbered=false,
+pdfborder={0 0 0},
+bookmarkstype=toc]{hyperref}
+\usepackage{pxjahyper}
+%%%%ここまでおまじないなので，なれるまで変更しないこと！！！%%%
+\author{森　敬吾}
+\date{\today}
+% \date{2020/6/2}
+\title{3章　不確かさの表現とロバスト安定化}
+\begin{document}
+\maketitle % タイトルを作る
+\tableofcontents %%目次を作る（学位論文で使う）
+\pagestyle{fancy}
+\lhead{\today}
+\rhead{右上の名前}
+\section{乗法的摂動と加法的摂動(3.1節)}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./drawing/block-diagram_figure3.1.pdf}
+\caption{block diagram with multiplicative perturbation}
+\label{fig:block diagram of fig 3.1}
+\end{figure}
+
+$H_\infty$制御では，非構造的摂動に対するロバスト安定化問題を解くことができるが，その際，非構造的摂動の表現方法として乗法的摂動および加法的摂動よく使われる．以下では，これらの摂動について説明する．なお，特に断りがない限り，制御対象は1入出システムと仮定する．
+\subsection{乗法的摂動}
+実制御対象およびノミナルモデルの伝達関数を，それぞれ$\tilde{P}$および$P$で定義する．このとき{
+\begin{align}
+\label{multiplicative perturbation}
+\tilde{P} = ( 1 + \Delta_m) P
+\end{align}
+で表現される$\Delta_m$のことを\textbf{乗法的摂動}(multiplicative perturbation)と呼ぶ．\figref{fig:block diagram of fig 3.1}に乗法的摂動を持つシステムのブロック線図を示す．
+周波数$\omega_i(i = 0,1,2,\cdots)$における実制御対象$\tilde{P}$のゲインと位相の実測値がそれぞれ$20 \log_{10}{g (\omega_i)}$[dB]と$\theta(\omega_i)$[rad]で与えられているならば，\eqref{eq1:multiplicative perturbation}から乗法的摂動を見積もることができる．
+\begin{align}
+\label{eq1:multiplicative perturbation}
+\Delta_m(j \omega_i) = \frac{ \tilde{P}(j \omega_i) - P(j \omega_i)} {P(j\omega_i)}, \qquad \tilde{P}(j\omega_i) = g(\omega_i)e^{j\theta(\omega_i)}
+\end{align}
+ただし，$P(j\omega_i)$はノミナルモデルPの周波数応答を表す．\eqref{eq1:multiplicative perturbation}が示すように，乗法的摂動は相対誤差に相当する．\\
+なお，Pが多入出力システムであるならば，乗法的摂動の表現として
+\begin{align}
+\label{eq2:multiplicative perturbation}
+\tilde{P} = (I + \Delta_m) P
+\end{align}
+および
+\begin{align}
+\label{eq3:multiplicative perturbation}
+\tilde{P} = P(I + \Delta_m)
+\end{align}
+の２通りがあり，両者の特性は異なることに注意する．ただし，$I$は$\Delta_m$のサイズと等しい単位行列を表すものとする．\\
+さて，乗法的摂動を持つシステムは集合として表現するのが適切である．そこで，$\| \Delta \|_\infty \leq 1 $を満たす集合$\Delta \in \mathcal{RH}^\infty $
+\footnote{$RH^\infty$は安定かつプロパな実数の係数を持つ伝達関数の集合を表す．なお，安定かつ厳密にプロパな実数の係数を持つ伝達関数の集合は$RH^2$と表記する．}　%注釈
+と摂動の周波数特性を表す既知の伝達関数$W_m \in \mathcal{RH}^\infty$を使って乗法的摂動を
+\begin{align}
+\label{eq4:multiplicative perturbation}
+\Delta_m = \Delta W_m
+\end{align}
+と定義し，さらに$\tilde{P}$を
+\begin{align}
+\label{eq5:multiplicative perturbation}
+\tilde{P} = \{(1 + \Delta W_m)P: \| \Delta \|_\infty \leq 1\}
+\end{align}
+と表現する．$\|Delta \|_\infty \leq 1$より
+\begin{align}
+\label{eq6:multiplicative perturbation}
+| \Delta_m(j\omega) | \leq | W_m (j\omega) |, \forall \omega
+\end{align}
+が成り立つので，$W_m(j\omega)$は$|\Delta_m (j\omega) |$の輪郭を与えていることになる．\\
+このように，集合で表されたモデルのことをモデル集合(model set)という．また，\eqref{eq4:multiplicative perturbation}で示すように，周波数に依存した特性，つまりダイナミクスを持つ摂動を動的摂動(unmodeled dynamics)と呼ぶ．\\
+$W_m$については，\eqref{eq1:multiplicative perturbation}から見積もった$\Delta_m (j\omega_i)$のゲイン線図を$W_m$のゲイン線図が覆うように，つまり
+\begin{align}
+\label{eq7:multiplicative perturbation}
+| \Delta_m (j\omega_i) | \leq | W_m(j\omega_i) |, \quad  i = 0,1,2,\cdots
+\end{align}
+を満たすように選ぶことで，実測した乗法的摂動を含むモデル集合が得られる．\\
+MATLABでは，動的摂動を使って乗法的摂動を生成するコマンドultidynが用意されている．ultidynを使って乗法的摂動を持つモデル集合を定義した例を実行3.1\footnote{ultidyn = uncertain linear , time-invariant dynamic objects \\usample = a random sample of the uncertain objects }に示す．この例では，\eqref{eq3:multiplicative perturbation}において
+\begin{align}
+\label{tf:action 3.1}
+P = \frac{1}{s + 1} , W_m = \frac{2s}{s + 10}
+\end{align}
+とした場合のモデル集合$\tilde{P}$を定義している．
+
+% 実行3.1
+\lstinputlisting{./simulation/bode-magnitude-figure3.2.m}
+
+% 図3.2
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./simulation/bode-magnitude-figure3.2.pdf}
+\caption{gain diagram of multiplicative perturbation }
+\label{fig:gain diagram of multiplicative perturbation}
+\end{figure}
+
+\subsection{加法的摂動}
+% 図3.3
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{./drawing/block-diagram_figure3.3.pdf}
+\caption{block diagram with additive perturbation}
+\label{fig:block diagram of fig 3.3}
+\end{figure}
+
+乗法的摂動のときと同様に$\tilde{P}$および$P$を定義したとき
+\begin{align}
+\label{eq1: additive perturbation}
+\tilde{P} = P + \Delta_a
+\end{align}
+で表現される$\Delta_a$のことを\textbf{加法的摂動}(additive perturbation)と呼ぶ．\figref{fig:block diagram of fig 3.3}に加法的摂動を持つシステムのブロック線図を示す．\\
+乗法的摂動の時と同様に，加法的摂動も実測した周波数応答$\tilde{P}(j \omega_i) = g(\omega_i) \mathrm{e}^{j \theta(\omega_i)}$を使って，\eqref{eq2:additive perturbation}から見積もることができる．
+\begin{align}
+\label{eq2:additive perturbation}
+\Delta_a (j \omega_i) = \tilde{P}(j \omega_i) - P(j \omega_i)
+\end{align}
+\eqref{eq2:additive perturbation}が示すように，加法的摂動は絶対誤差に相当する．\\
+乗法的摂動を持つシステムと同様に，加法的摂動を持つシステムも，\eqref{eq3:additive perturbation}のようにモデル集合として表せる．
+\begin{align}
+\label{eq3:additive perturbation}
+\tilde{P} = \{ P + \Delta W_a: \| \Delta \|_\infty \leq 1 \}
+\end{align}
+ただし，$W_a \in \mathcal{RH}^\infty$は加法的摂動の周波数特性を表す既知の伝達関数であり，乗法的摂動と同様に\eqref{eq2:additive perturbation}から見積もった$\Delta_a (j\omega_i)$に対して
+\begin{align}
+\label{eq4:additive perturbation}
+| \Delta_a (j\omega_i) | \leq | W_a (j\omega_i) |, \quad i = 0,1,2,\cdots
+\end{align}
+を満たすように$W_a$を選ぶと，実測した加法的摂動を含むモデル集合が得られる．
+
+\subsection{乗法的摂動と加法的摂動の見積もり}
+簡単な例として，2次遅れシステム
+\begin{align}
+\label{tf:action 3.2}
+P = \frac{{\omega_n}^2}{s^2 + 2 \zeta \omega_n s + {\omega_n}^2}
+\end{align}
+において，$\omega_n = 1, \zeta = 0.1$の場合をノミナルモデルとし，それらのパラメータが$\pm 20\%$変動したものを実制御対象としたときの，乗法的摂動と加法的摂動を見積もる．そのためのMATLABのプログラムを実行3.2\footnote{ureal = an uncertain real parameter \\ ufrd = uncertain frequency response data}に示す．
+
+% 実行3.2
+\lstinputlisting{./simulation/robust_3.1.m}
+
+実際の制御対象については，その周波数応答のみが得られるという場合が多いことから，実行3.2でも，ufrdによって周波数応答を求めてから乗法的摂動と加法的摂動を計算するようにしている．\\
+このプログラムを実行して得られる乗法的摂動および加法的摂動のゲイン線図を，\figref{}および\figref{}に示す．なお，各図には，摂動を含む制御対象$\tilde{P}$のゲイン特性も合わせて示している．乗法的摂動は相対誤差に相当するので，加法的摂動に比べて，制御対象のゲインが小さくなる高周波数においてゲインが大きくなることがわかる．
+
+% 図3.4
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./simulation/gain-diagram-with-multi.pdf}
+\caption{gain diagram with multiplicative perturbation}
+\label{gain diagram with multi}
+\end{figure}
+
+% 図3.5
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./simulation/gain-diagram-with-add.pdf}
+\caption{gain diagram with additive perturbation}
+\label{gain diagram with add}
+\end{figure}
+
+\section{ロバスト安定化問題(3.2節)}
+\subsection{スモールゲイン定理}
+
+考えられるすべての摂動に対して，閉ループ系が内部安定となる制御器を求める問題は\textbf{ロバスト安定化問題}(robust stabilization problem)と呼ばれる．まず，ロバスト安定化問題を説明するうえで重要となるスモールゲイン定理(small gien theorem)を示す．\\
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./drawing/small-gain-theorem.pdf}
+\caption{small gain theorem}
+\label{small gain theorem}
+\end{figure}
+
+\tcbset{enhanced,colback=red!5!white,
+boxrule=0.4pt,sharp corners,
+colframe=gray!75!black,fonttitle=\bfseries}
+\begin{tcolorbox}[title=定理3.1 スモールゲイン定理,
+drop small lifted shadow=black]
+\figref{small gain theorem}において，$\Delta$および$M$は安定でプロパな伝達関数とする．このとき，$\| \Delta \|_\infty \leq 1 $を満たすすべての$ \Delta $に対して，図の閉ループ系が内部安定となるための必要十分条件は$ \| M \|_\infty < 1 $ となる．
+\end{tcolorbox}
+
+スモールゲイン定理では$ \Delta $は必ずしも既知である必要はなく，その大きさだけわかっていればよいことから，摂動を持つシステムの安定化条件を導くために利用される．
+
+\subsection{乗法的摂動に対するロバスト安定化}
+% 図3.7(a)
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./drawing/unity-feedback.pdf}
+\caption{unity feedback}
+\label{unity feedback}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./drawing/fig3.7-multi.pdf}
+\caption{robust stabitliy with multiplicative perturbation}
+\label{robust stabitliy with multiplicative perturbation}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./drawing/fig3.7_equivalent-transformation.pdf}
+\caption{equivalent transformation}
+\label{equivalent transformation}
+\end{figure}
+\figref{unity feedback}に示す通常の直結フィードバック系において，制御対象$ \tilde{P} $が\eqref{eq5:multiplicative perturbation}に示す乗法的摂動を持つ場合に，閉ループ系がロバスト安定になる条件をスモールゲイン定理を用いて導出する．まず，目標入力$r$は内部安定性に影響を与えないので，省略すると\figref{equivalent transformation}へ等価変換できる．ここで，相補感度関数
+\begin{align*}
+ T = \frac{PK}{1 + PK}
+\end{align*}
+を定義すると，\figref{robust stabitliy with multiplicative perturbation}において点aから点bまでの伝達関数は$-T$になるので，\figref{robust stabitliy with multiplicative perturbation}はさらに\figref{equivalent transformation}に等価変換できる．\\
+\figref{equivalent transformation}の閉ループ系を\figref{small gain theorem}に見立ててスモールゲイン定理を適用すると，乗法的摂動に対して閉ループ系がロバスト安定となるための必要十分条件として\eqref{robust stabilization problem of multi}が得られる．
+
+\begin{align}
+\label{robust stabilization problem of multi}
+ \| W_m T \|_\infty < 1
+\end{align}
+
+\subsection{加法的摂動に対するロバスト安定化}
+% 図3.8(a)
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./drawing/fig3.8_(a).pdf}
+\caption{robust stability with additive perturbation}
+\label{robust stablity with additive perturbation}
+\end{figure}
+% 図3.8(b)
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./drawing/fig3.8_(b).pdf}
+\caption{equivalent transformation of \figref{robust stablity with additive perturbation}}
+\label{fig3.8(b)}
+\end{figure}
+
+\figref{unity feedback}の直結フィードバック系の$ \tilde{P} $が\eqref{eq3:additive perturbation}に示す加法的摂動を持つ場合は，\figref{robust stablity with additive perturbation}に等価変換できる．ここで
+\begin{align}
+\label{def: defenition of T_a}
+T_a := \frac{K}{ 1 + PK }
+\end{align}
+を定義すると，\figref{robust stablity with additive perturbation}の点aから点bまでの伝達関数は$- T_a $になるので，\figref{robust stablity with additive perturbation}はさらに\figref{fig3.8(b)}に等価変換できる．ここで，スモールゲイン定理を適用すると，加法的摂動に対して閉ループ系がロバスト安定となるための必要十分条件として，\eqref{robust stabilization problem of add}が得られる．
+\begin{align}
+\label{robust stabilization problem of add}
+\| W_a T_a \|_\infty < 1 
+\end{align}
+ここで，$T_a$は準相補感度関数(semi-complementary sensitivity funtion)と呼ばれる．
+
+\subsection{ロバスト安定化条件の意味}
+\eqref{robust stabilization problem of multi}や\eqref{robust stabilization problem of add}の条件は，それらの意味をゲイン線図上で解釈できる．このことを，乗法的摂動の場合を例にとって説明する．
+まず，\eqref{robust stabilization problem of multi}から\eqref{eq1 of 3.2.4}を得る．
+\begin{align}
+\label{eq1 of 3.2.4}
+\| W_m T \|_\infty < 1 \Leftrightarrow | W_m(j \omega ) T(j \omega ) | < 1 , \forall \omega \Leftrightarrow | W_m(j \omega) | \cdot | T(j \omega ) | < 1 , \forall \omega \Leftrightarrow | T(j \omega) | < \frac{1}{| W_m (j \omega)} |, \forall \omega
+\end{align}
+
+また，\eqref{eq6:multiplicative perturbation}より\eqref{eq2 of 3.2.4}を得る．
+\begin{align}
+\label{eq2 of 3.2.4}
+\frac{1}{| W_m (j \omega)| } \leq \frac{1}{| \Delta_m (j \omega)} , \forall \omega
+\end{align}
+
+以上から，\eqref{eq1 of 3.2.4}と\eqref{eq2 of 3.2.4}を合わせると関係式\eqref{eq3 of 3.2.4}を選ぶと，実測した加法的摂動を含むモデル集合が得られる．
+\begin{align}
+\label{eq3 of 3.2.4}
+| T(j\omega) | < \frac{1}{ | W_m (j \omega) | } \leq \frac{1}{ | \Delta_m (j \omega)}
+\end{align}
+
+% 図3.9
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{./drawing/fig3.9.pdf}
+\caption{interpretation of robust stabilization condition }
+\label{fig3.9}
+\end{figure}
+
+\figref{fig3.9}に\eqref{eq3 of 3.2.4}の関係を示す．この図から，乗法的摂動$\Delta_m$に対して閉ループ系がロバスト安定になるためには，相補感度関数のゲインは摂動のゲインの逆数よりも下側に周波数成形されなければならないことがわかる．つまり，制御帯域$\omega_b$は，摂動によって制約されることになる．\\
+\eqref{eq3 of 3.2.4}を満たす制御器は必ずしもロバスト制御理論を使わなくても求められるが，制御対象が不安定システムであったり，複数の共振特性を持ったり，あるいは，他入出力システムであると，必ずしも容易ではない．ロバスト制御理論を使えば，\eqref{eq3 of 3.2.4}を満たしながら，制御帯域を最大化する制御器を系統的に求めることができる．
+
+\appendix
+\section{$\|x\|_\infty$の直観的意味}
+\begin{align}
+\label{eq:meaning of l_infty norm}
+\| x \|_\infty = \sum_{i = 1}^{n} \quad |x_i|^\infty = \sum_{i = 1}^{n} \quad \{ x_1^\infty + x_2^\infty + \cdots  + x_n^\infty \}
+ = \max_{1 \leq i \leq n} \quad | x_i | 
+\end{align}
+
+a
+\bibliographystyle{junsrt}
+\bibliography{reference}
+\end{document}
+
